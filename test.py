@@ -23,3 +23,25 @@ class TestAppExceptionNew(TestCase):
         self.assertEqual(CustomException.NotAnInteger.code, self.payload['code'])
         self.assertEqual(CustomException.NotAnInteger.message, self.payload['message'])
         self.assertEqual(CustomException.NotAnInteger.type_name, self.payload['type_name'])
+
+
+class TestAppExceptionFunctionality(TestCase):
+
+    def setUp(self):
+        self.name = 'NotAnInteger'
+        self.payload = {
+            'code': 100,
+            'type_name': ValueError,
+            'message': 'Value is not an integer!'
+        }
+
+        class CustomException(AppException):
+            NotAnInteger = tuple(self.payload.values())
+
+        self.exception = CustomException
+
+    def test_look_up_by_name(self):
+        self.assertEqual(self.exception['NotAnInteger'], self.exception.NotAnInteger)
+
+    def test_look_up_by_code(self):
+        self.assertEqual(self.exception(100), self.exception.NotAnInteger)
