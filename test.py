@@ -26,6 +26,7 @@ class TestAppExceptionNew(TestCase):
 
 
 class TestAppExceptionFunctionality(TestCase):
+    """ Test exception class functionality."""
 
     def setUp(self):
         self.name = 'NotAnInteger'
@@ -41,7 +42,29 @@ class TestAppExceptionFunctionality(TestCase):
         self.exception = CustomException
 
     def test_look_up_by_name(self):
+        """Test looking up by name."""
+
         self.assertEqual(self.exception['NotAnInteger'], self.exception.NotAnInteger)
 
     def test_look_up_by_code(self):
+        """Test looking up by code."""
+
         self.assertEqual(self.exception(100), self.exception.NotAnInteger)
+
+    def test_throw_raises_error_default_message(self):
+        """Test throwing an exception when default message is used."""
+
+        with self.assertRaises(self.payload['type_name']) as err:
+            self.exception.NotAnInteger.throw()
+
+        self.assertEqual(str(err.exception), self.payload['message'])
+
+    def test_throw_raises_error_custom_message(self):
+        """Test throwing an exception when custom message is used."""
+
+        custom_message = 'New custom message'
+
+        with self.assertRaises(self.payload['type_name']) as err:
+            self.exception.NotAnInteger.throw(custom_message)
+
+        self.assertEqual(str(err.exception), custom_message)

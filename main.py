@@ -12,3 +12,8 @@ class AppException(enum.Enum):
 
         return member
 
+    def throw(self, msg=None):
+        if msg is None:
+            raise self.type_name(self.message)
+
+        raise self.type_name(msg)
