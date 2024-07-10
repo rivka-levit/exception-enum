@@ -19,10 +19,22 @@ class TestAppExceptionNew(TestCase):
         class CustomException(AppException):
             NotAnInteger = tuple(self.payload.values())
 
-        self.assertEqual(CustomException.NotAnInteger.value, self.payload['code'])
-        self.assertEqual(CustomException.NotAnInteger.code, self.payload['code'])
-        self.assertEqual(CustomException.NotAnInteger.message, self.payload['message'])
-        self.assertEqual(CustomException.NotAnInteger.type_name, self.payload['type_name'])
+        self.assertEqual(
+            CustomException.NotAnInteger.value,
+            self.payload['code']
+        )
+        self.assertEqual(
+            CustomException.NotAnInteger.code,
+            self.payload['code']
+        )
+        self.assertEqual(
+            CustomException.NotAnInteger.message,
+            self.payload['message']
+        )
+        self.assertEqual(
+            CustomException.NotAnInteger.exception,
+            self.payload['type_name']
+        )
 
 
 class TestAppExceptionFunctionality(TestCase):
@@ -44,7 +56,10 @@ class TestAppExceptionFunctionality(TestCase):
     def test_look_up_by_name(self):
         """Test looking up by name."""
 
-        self.assertEqual(self.exception['NotAnInteger'], self.exception.NotAnInteger)
+        self.assertEqual(
+            self.exception['NotAnInteger'],
+            self.exception.NotAnInteger
+        )
 
     def test_look_up_by_code(self):
         """Test looking up by code."""
@@ -57,7 +72,10 @@ class TestAppExceptionFunctionality(TestCase):
         with self.assertRaises(self.payload['type_name']) as err:
             self.exception.NotAnInteger.throw()
 
-        self.assertEqual(str(err.exception), self.payload['message'])
+        self.assertEqual(
+            str(err.exception),
+            f'{self.payload['code']} {self.payload['message']}'
+        )
 
     def test_throw_raises_error_custom_message(self):
         """Test throwing an exception when custom message is used."""
@@ -67,4 +85,7 @@ class TestAppExceptionFunctionality(TestCase):
         with self.assertRaises(self.payload['type_name']) as err:
             self.exception.NotAnInteger.throw(custom_message)
 
-        self.assertEqual(str(err.exception), custom_message)
+        self.assertEqual(
+            str(err.exception),
+            f'{self.payload['code']} {custom_message}'
+        )
